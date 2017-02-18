@@ -14,9 +14,7 @@ You'll need:
 ### To Set Up
 - Create new project
 - Import the folders into the project
-- Extract natives from jar files inside of the lib/natives directory
-- Link the libraries to your project
-- Set all LWJGL native paths to the lib/natives directory
+- Link the library jars (including the native jars) to your project
 - Build And Run
 
 ### Libraries used in the project
