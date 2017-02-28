@@ -7,7 +7,7 @@ public class Mesh {
 	private int vertexArrayObject;
 	private int vertexBufferObject;
 	
-	private int count;
+	private int vertexCount;
 	
 	public Mesh() {
 	}
@@ -23,7 +23,7 @@ public class Mesh {
 		
 		glBindVertexArray(0);
 		
-		count = vertices.length / 3;
+		vertexCount = vertices.length / 3;
 		
 		return true;
 	}
@@ -38,7 +38,7 @@ public class Mesh {
 		
 		glEnableVertexAttribArray(0);
 		
-		glDrawArrays(GL_TRIANGLES, 0, count);
+		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
 		glDisableVertexAttribArray(0);
 		
