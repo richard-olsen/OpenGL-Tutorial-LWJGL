@@ -19,6 +19,8 @@ public class Mesh {
 		vertexBufferObject = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
 		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 		
 		glBindVertexArray(0);
@@ -35,12 +37,8 @@ public class Mesh {
 	
 	public void draw() {
 		glBindVertexArray(vertexArrayObject);
-		
-		glEnableVertexAttribArray(0);
-		
-		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
-		glDisableVertexAttribArray(0);
+		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 		
 		glBindVertexArray(0);
 	}

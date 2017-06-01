@@ -35,17 +35,18 @@ public class Main {
 				0,1,0,
 				1,-1,0
 		});
-		
+	
 		Shader testShader = new Shader();
-		testShader.create("shader");
+		testShader.create("basic");
 		
 		while (!glfwWindowShouldClose(window)) {
 			glfwPollEvents();
 			
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			testShader.bind();
+			
+			testShader.useShader();
 			testMesh.draw();
-			testShader.unbind();
+			
 			glfwSwapBuffers(window);
 		}
 		testMesh.destroy();

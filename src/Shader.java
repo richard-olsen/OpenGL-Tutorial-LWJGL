@@ -1,4 +1,4 @@
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
 
 import java.io.BufferedReader;
@@ -6,103 +6,86 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Shader {
-	private int programObject;
-	private int vertexShaderObject;
-	private int fragmentShaderObject;
+	private int program;
+	private int vertexShader;
+	private int fragmentShader;
 	
 	public Shader() {
 	}
 	
 	public boolean create(String shader) {
-		int[] error = new int[1];
+		int success[] = new int[1];
 		
-		vertexShaderObject = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(vertexShaderObject, getSourceFromFile(shader + ".vs"));
-		glCompileShader(vertexShaderObject);
+		vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		glShaderSource(vertexShader, readShader(shader + ".vs"));
+		glCompileShader(vertexShader);
 		
-		glGetShaderiv(vertexShaderObject, GL_COMPILE_STATUS, error);
-		if (error[0] == GL_FALSE) {
-			System.err.println(glGetShaderInfoLog(vertexShaderObject));
-			
-			glDeleteShader(vertexShaderObject);
-			
-			return false;
+		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, success);
+		if (success[0] == GL_FALSE) {
+			System.err.println("Vertex Shader Error: \n" + glGetShaderInfoLog(vertexShader));
 		}
 		
-		fragmentShaderObject = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragmentShaderObject, getSourceFromFile(shader + ".fs"));
-		glCompileShader(fragmentShaderObject);
+		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(fragmentShader, readShader(shader + ".fs"));
+		glCompileShader(fragmentShader);
 		
-		glGetShaderiv(fragmentShaderObject, GL_COMPILE_STATUS, error);
-		if (error[0] == GL_FALSE) {
-			System.err.println(glGetShaderInfoLog(fragmentShaderObject));
-			
-			glDeleteShader(vertexShaderObject);
-			glDeleteShader(fragmentShaderObject);
-			
-			return false;
+		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, success);
+		if (success[0] == GL_FALSE) {
+			System.err.println("Fragment Shader Error: \n" + glGetShaderInfoLog(fragmentShader));
 		}
 		
-		programObject = glCreateProgram();
-		glAttachShader(programObject, vertexShaderObject);
-		glAttachShader(programObject, fragmentShaderObject);
+		program = glCreateProgram();
 		
-		glLinkProgram(programObject);
+		glAttachShader(program, vertexShader);
+		glAttachShader(program, fragmentShader);
 		
-		glGetProgramiv(programObject, GL_LINK_STATUS, error);
-		if (error[0] == GL_FALSE) {
-			System.err.println(glGetProgramInfoLog(programObject));
-			
-			destroy();
-			
-			return false;
+		glLinkProgram(program);
+		
+		glGetProgramiv(program, GL_LINK_STATUS, success);
+		if (success[0] == GL_FALSE) {
+			System.err.println("Program Link Error: \n" + glGetProgramInfoLog(program));
 		}
 		
-		glValidateProgram(programObject);
+		glValidateProgram(program);
 		
-		glGetProgramiv(programObject, GL_VALIDATE_STATUS, error);
-		if (error[0] == GL_FALSE) {
-			System.err.println(glGetProgramInfoLog(programObject));
-			
-			destroy();
-			
-			return false;
+		glGetProgramiv(program, GL_VALIDATE_STATUS, success);
+		if (success[0] == GL_FALSE) {
+			System.err.println("Program Validate Error: \n" + glGetProgramInfoLog(program));
 		}
 		
 		return true;
 	}
 	
 	public void destroy() {
-		glDetachShader(programObject, vertexShaderObject);
-		glDetachShader(programObject, fragmentShaderObject);
-		glDeleteShader(vertexShaderObject);
-		glDeleteShader(fragmentShaderObject);
-		glDeleteProgram(programObject);
+		glDetachShader(program, vertexShader);
+		glDetachShader(program, fragmentShader);
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
+		glDeleteProgram(program);
 	}
 	
-	public void bind() {
-		glUseProgram(programObject);
+	public void useShader() {
+		glUseProgram(program);
 	}
 	
-	public void unbind() {
-		glUseProgram(0);
-	}
-	
-	private static String getSourceFromFile(String filename) {
+	private static String readShader(String filename) {
 		BufferedReader bufferedReader;
-		StringBuilder source = new StringBuilder();
+		StringBuilder stringBuilder = new StringBuilder();
+		
 		try {
-			bufferedReader = new BufferedReader(new FileReader("./shaders/"+filename));
-			String currentLine = null;
+			bufferedReader = new BufferedReader(new FileReader("./shaders/" + filename));
 			
-			while ((currentLine = bufferedReader.readLine()) != null) {
-				source.append(currentLine).append("\n");
+			String line;
+			
+			while ( (line = bufferedReader.readLine()) != null) {
+				stringBuilder.append(line).append("\n");
 			}
 			
 			bufferedReader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return source.toString();
+		
+		return stringBuilder.toString();
 	}
 }
