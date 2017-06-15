@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.joml.Matrix4f;
+
 public class Shader {
 	private int program;
 	private int vertexShader;
@@ -66,6 +68,15 @@ public class Shader {
 	
 	public void useShader() {
 		glUseProgram(program);
+	}
+	
+	public void setUniform(String name, Matrix4f value) {
+		int location = glGetUniformLocation(program, name);
+		if (location != -1) {
+			float m[] = new float[16];
+			value.get(m);
+			glUniformMatrix4fv(location, false, m);
+		}
 	}
 	
 	private static String readShader(String filename) {
