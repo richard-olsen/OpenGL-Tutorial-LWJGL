@@ -1,0 +1,46 @@
+apply plugin: "java"
+apply plugin: "application"
+apply plugin: "eclipse"
+apply plugin: "idea"
+
+
+mainClassName="com.github.elegantwhelp.ogltut.Main"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+import org.gradle.internal.os.OperatingSystem
+
+switch ( OperatingSystem.current() ) {
+	case OperatingSystem.WINDOWS:
+		project.ext.lwjglNatives = "natives-windows"
+		break
+	case OperatingSystem.LINUX:
+		project.ext.lwjglNatives = "natives-linux"
+	break
+	case OperatingSystem.MAC_OS:
+		project.ext.lwjglNatives = "natives-macos"
+		break
+}
+
+project.ext.lwjglVersion = "3.1.6"
+project.ext.jomlVersion = "1.9.8"
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "org.lwjgl:lwjgl:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-assimp:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-glfw:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-opengl:$lwjglVersion"
+	compile "org.lwjgl:lwjgl-stb:$lwjglVersion"
+	compile "org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-assimp:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives"
+	compile "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives"
+	compile "org.joml:joml:${jomlVersion}"
+}
