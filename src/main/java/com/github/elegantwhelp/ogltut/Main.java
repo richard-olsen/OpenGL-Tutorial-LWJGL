@@ -1,6 +1,7 @@
 package com.github.elegantwhelp.ogltut;
 
 import com.github.elegantwhelp.ogltut.graphics.Mesh;
+import com.github.elegantwhelp.ogltut.graphics.Shader;
 import com.github.elegantwhelp.ogltut.io.Window;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -18,6 +19,9 @@ public class Main {
 				1,-1,0
 		});
 		
+		Shader shader = new Shader();
+		shader.create("basic");
+		
 		boolean isRunning = true;
 		
 		while (isRunning) {
@@ -25,6 +29,7 @@ public class Main {
 			
 			glClear(GL_COLOR_BUFFER_BIT);
 			
+			shader.useShader();
 			mesh.draw();
 			
 			window.swapBuffers();
@@ -37,6 +42,7 @@ public class Main {
 		}
 		
 		mesh.destroy();
+		shader.destroy();
 		
 		window.free();
 	}
