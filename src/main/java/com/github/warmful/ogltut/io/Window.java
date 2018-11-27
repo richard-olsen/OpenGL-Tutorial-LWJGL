@@ -1,4 +1,4 @@
-package com.github.elegantwhelp.ogltut.io;
+package com.github.warmful.ogltut.io;
 
 import static org.lwjgl.glfw.GLFW.*;
 

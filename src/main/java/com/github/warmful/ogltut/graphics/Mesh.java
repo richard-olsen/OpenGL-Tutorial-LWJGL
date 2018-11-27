@@ -1,4 +1,4 @@
-package com.github.elegantwhelp.ogltut.graphics;
+package com.github.warmful.ogltut.graphics;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;

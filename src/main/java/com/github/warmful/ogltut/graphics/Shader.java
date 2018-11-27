@@ -1,4 +1,4 @@
-package com.github.elegantwhelp.ogltut.graphics;
+package com.github.warmful.ogltut.graphics;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +9,8 @@ import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
 	private int vertexShader, fragmentShader, program;
+	
+	private int uniMatProjection, uniMatTransformWorld, uniMatTransformObject;
 	
 	public Shader() {
 	}
@@ -52,6 +54,11 @@ public class Shader {
 			System.err.println("Program Validate: \n" + glGetProgramInfoLog(program));
 			return false;
 		}
+		
+		uniMatProjection = glGetUniformLocation(program, "cameraProjection");
+		uniMatTransformWorld = glGetUniformLocation(program, "transformWorld");
+		uniMatTransformObject = glGetUniformLocation(program, "transformObject");
+		
 		return true;
 	}
 	
@@ -65,6 +72,27 @@ public class Shader {
 	
 	public void useShader() {
 		glUseProgram(program);
+	}
+	
+	public void setCamera(Camera camera) {
+		if (uniMatProjection != -1) {
+			float matrix[] = new float[16];
+			camera.getProjection().get(matrix);
+			glUniformMatrix4fv(uniMatProjection, false, matrix);
+		}
+		if (uniMatTransformWorld != -1) {
+			float matrix[] = new float[16];
+			camera.getTransformation().get(matrix);
+			glUniformMatrix4fv(uniMatTransformWorld, false, matrix);
+		}
+	}
+	
+	public void setTransform(Transform transform) {
+		if (uniMatTransformObject != -1) {
+			float matrix[] = new float[16];
+			transform.getTransformation().get(matrix);
+			glUniformMatrix4fv(uniMatTransformObject, false, matrix);
+		}
 	}
 	
 	private String readSource(String file) {
