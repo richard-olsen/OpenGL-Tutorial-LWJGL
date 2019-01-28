@@ -11,6 +11,7 @@ public class Shader {
 	private int vertexShader, fragmentShader, program;
 	
 	private int uniMatProjection, uniMatTransformWorld, uniMatTransformObject;
+	private int uniSampleTexture;
 	
 	public Shader() {
 	}
@@ -58,6 +59,7 @@ public class Shader {
 		uniMatProjection = glGetUniformLocation(program, "cameraProjection");
 		uniMatTransformWorld = glGetUniformLocation(program, "transformWorld");
 		uniMatTransformObject = glGetUniformLocation(program, "transformObject");
+		uniSampleTexture = glGetUniformLocation(program, "sampleTexture");
 		
 		return true;
 	}
@@ -72,6 +74,12 @@ public class Shader {
 	
 	public void useShader() {
 		glUseProgram(program);
+	}
+	
+	public void setSampleTexture(int sample) {
+		if (uniSampleTexture != -1) {
+			glUniform1i(uniSampleTexture, sample);
+		}
 	}
 	
 	public void setCamera(Camera camera) {

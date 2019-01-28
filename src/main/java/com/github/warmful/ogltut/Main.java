@@ -3,6 +3,7 @@ package com.github.warmful.ogltut;
 import com.github.warmful.ogltut.graphics.Camera;
 import com.github.warmful.ogltut.graphics.Mesh;
 import com.github.warmful.ogltut.graphics.Shader;
+import com.github.warmful.ogltut.graphics.Texture;
 import com.github.warmful.ogltut.graphics.Transform;
 import com.github.warmful.ogltut.io.Window;
 
@@ -20,13 +21,16 @@ public class Main {
 		
 		Mesh mesh = new Mesh();
 		mesh.create(new float[] {
-				-1,-1,0,
-				0,1,0,
-				1,-1,0
+				-1,-1,0,  0,1,
+				0,1,0,    0.5f,0,
+				1,-1,0,   1,1
 		});
 		
 		Shader shader = new Shader();
 		shader.create("basic");
+		
+		Texture texture = new Texture();
+		texture.create("/textures/checker.png");
 		
 		Camera camera = new Camera();
 		Transform transform = new Transform();
@@ -51,6 +55,8 @@ public class Main {
 			shader.useShader();
 			shader.setCamera(camera);
 			shader.setTransform(transform);
+			shader.setSampleTexture(0);
+			texture.bind();
 			mesh.draw();
 			
 			window.swapBuffers();
@@ -62,6 +68,7 @@ public class Main {
 			}
 		}
 		
+		texture.destroy();
 		mesh.destroy();
 		shader.destroy();
 		

@@ -11,6 +11,8 @@ public class Mesh {
 	
 	private int vertexCount;
 	
+	public static final int VERTEX_SIZE = 5;
+	
 	public Mesh() {
 	}
 	
@@ -23,11 +25,13 @@ public class Mesh {
 		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, VERTEX_SIZE * 4, 0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, VERTEX_SIZE * 4, 12);
 		
 		glBindVertexArray(0);
 		
-		vertexCount = vertices.length / 3;
+		vertexCount = vertices.length / VERTEX_SIZE;
 		
 		return true;
 	}
